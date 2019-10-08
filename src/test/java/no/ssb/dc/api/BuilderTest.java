@@ -46,7 +46,7 @@ public class BuilderTest {
             .node(paginate("page-loop")
                     .variable("from-position", "${next-position}")
                     .step(execute("page"))
-                    .prefetchThreshold(0.5)
+                    .prefetchThreshold(5)
                     .until(whenVariableIsNull("next-position"))
             )
             .node(get("page")
