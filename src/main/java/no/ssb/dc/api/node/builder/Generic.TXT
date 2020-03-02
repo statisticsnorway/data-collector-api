@@ -1,0 +1,409 @@
+builder:
+(0)BEGIN START_OBJECT { null null
+ (1)FIELD_NAME null  => type: type
+(0) fieldValue: VALUE_STRING -> type: Specification
+(0) fieldValue: VALUE_STRING -> name: Collect Tvinn
+(0) fieldValue: VALUE_STRING -> startFunctionId: loop
+(0) fieldValue: VALUE_STRING -> id: TOLL-TVINN
+ <--- 4
+(0)START array: START_ARRAY [ { configure null START_OBJECT { null
+ (1)BEGIN START_OBJECT { null null
+  (2)FIELD_NAME null  => type: type
+ (1) fieldValue: VALUE_STRING -> type: SpecificationContext
+ <--- 1
+ (1)END fieldValue: START_OBJECT -> variables: null
+  (2)BEGIN START_OBJECT { variables null
+   (3)FIELD_NAME null  => TestURL: TestURL
+  (2) fieldValue: VALUE_STRING -> TestURL: https://mp-at.toll.no
+  (2) fieldValue: VALUE_STRING -> ProduksjonURL: https://mp-sit.toll.no
+  (2) fieldValue: VALUE_STRING -> nextMarker: ${contentStream.hasLastPosition() ? contentStream.lastPosition() : "last"}
+ <--- 3
+  (2)END fieldValue: END_OBJECT -> variables: null
+   (3)BEGIN END_OBJECT } variables null
+    (4)FIELD_NAME null  => globalState: globalState
+ <--- 0
+   (3)END fieldValue: START_OBJECT -> globalState: null
+    (4)BEGIN START_OBJECT { globalState null
+     (5)FIELD_NAME null  => global.topic: global.topic
+    (4) fieldValue: VALUE_STRING -> global.topic: tvinn-test
+ <--- 1
+    (4)END fieldValue: END_OBJECT -> globalState: null
+     (5)BEGIN END_OBJECT } globalState null
+      (6)FIELD_NAME null  => headers: headers
+ <--- 0
+     (5)END fieldValue: START_OBJECT -> headers: null
+      (6)BEGIN START_OBJECT { headers null
+       (7)FIELD_NAME null  => accept: accept
+ <--- 0
+      (6)START array: START_ARRAY [ { accept null VALUE_STRING null application/xml
+       (7)BEGIN VALUE_STRING null null application/xml
+       (7)end END_ARRAY ]
+       (7)BEGIN END_ARRAY ] accept null
+       (7)end END_OBJECT }
+       (7)BEGIN END_OBJECT } headers null
+       (7)end END_OBJECT }
+       (7)BEGIN END_OBJECT } null null
+       (7)--> START_OBJECT: START_OBJECT {  null null
+       (7)end START_OBJECT {
+       (7)BEGIN START_OBJECT { null null
+        (8)FIELD_NAME null  => type: type
+       (7) fieldValue: VALUE_STRING -> type: Security
+       (7) fieldValue: VALUE_STRING -> bundleName: toll-test-certs
+ <--- 2
+       (7)END fieldValue: END_OBJECT -> null: null
+        (8)BEGIN END_OBJECT } null null
+        (8)end END_ARRAY ]
+        (8)BEGIN END_ARRAY ] configure null
+         (9)FIELD_NAME null  => functions: functions
+ <--- 0
+        (8)END fieldValue: START_OBJECT -> functions: null
+         (9)BEGIN START_OBJECT { functions null
+          (10)FIELD_NAME null  => loop: loop
+ <--- 0
+         (9)END fieldValue: START_OBJECT -> loop: null
+          (10)BEGIN START_OBJECT { loop null
+           (11)FIELD_NAME null  => type: type
+          (10) fieldValue: VALUE_STRING -> type: Paginate
+          (10) fieldValue: VALUE_STRING -> id: loop
+ <--- 2
+          (10)END fieldValue: START_OBJECT -> variables: null
+           (11)BEGIN START_OBJECT { variables null
+            (12)FIELD_NAME null  => fromMarker: fromMarker
+           (11) fieldValue: VALUE_STRING -> fromMarker: ${nextMarker}
+ <--- 1
+           (11)END fieldValue: END_OBJECT -> variables: null
+            (12)BEGIN END_OBJECT } variables null
+             (13)FIELD_NAME null  => threshold: threshold
+ <--- 0
+            (12)END fieldValue: VALUE_NUMBER_INT -> threshold: 150
+             (13)BEGIN VALUE_NUMBER_INT null threshold 150
+              (14)FIELD_NAME null  => addPageContent: addPageContent
+ <--- 0
+             (13)END fieldValue: VALUE_TRUE -> addPageContent: true
+              (14)BEGIN VALUE_TRUE true addPageContent true
+               (15)FIELD_NAME null  => iterate: iterate
+ <--- 0
+              (14)START array: START_ARRAY [ true iterate null START_OBJECT { null
+               (15)BEGIN START_OBJECT { null null
+                (16)FIELD_NAME null  => type: type
+               (15) fieldValue: VALUE_STRING -> type: Execute
+               (15) fieldValue: VALUE_STRING -> executeId: event-list
+ <--- 2
+               (15)END fieldValue: END_OBJECT -> null: null
+                (16)BEGIN END_OBJECT } null null
+                (16)end END_ARRAY ]
+                (16)BEGIN END_ARRAY ] iterate null
+                 (17)FIELD_NAME null  => until: until
+ <--- 0
+                (16)END fieldValue: START_OBJECT -> until: null
+                 (17)BEGIN START_OBJECT { until null
+                  (18)FIELD_NAME null  => type: type
+                 (17) fieldValue: VALUE_STRING -> type: ConditionWhenVariableIsNull
+                 (17) fieldValue: VALUE_STRING -> identifier: nextMarker
+ <--- 2
+                 (17)END fieldValue: END_OBJECT -> until: null
+                  (18)BEGIN END_OBJECT } until null
+                  (18)end END_OBJECT }
+                  (18)BEGIN END_OBJECT } loop null
+                   (19)FIELD_NAME null  => event-list: event-list
+ <--- 0
+                  (18)END fieldValue: START_OBJECT -> event-list: null
+                   (19)BEGIN START_OBJECT { event-list null
+                    (20)FIELD_NAME null  => type: type
+                   (19) fieldValue: VALUE_STRING -> type: Get
+                   (19) fieldValue: VALUE_STRING -> id: event-list
+                   (19) fieldValue: VALUE_STRING -> url: ${TestURL}/atomfeed/toll/deklarasjon-ekstern-feed/?marker=${fromMarker}&limit=25&direction=forward
+ <--- 3
+                   (19)START array: START_ARRAY [ { returnVariables null VALUE_STRING null nextMarker
+                    (20)BEGIN VALUE_STRING null null nextMarker
+                    (20)end END_ARRAY ]
+                    (20)BEGIN END_ARRAY ] returnVariables null
+                     (21)FIELD_NAME null  => responseValidators: responseValidators
+ <--- 0
+                    (20)START array: START_ARRAY [ ] responseValidators null START_OBJECT { null
+                     (21)BEGIN START_OBJECT { null null
+                      (22)FIELD_NAME null  => type: type
+                     (21) fieldValue: VALUE_STRING -> type: HttpStatusValidation
+ <--- 1
+                     (21)END fieldValue: START_OBJECT -> success: null
+                      (22)BEGIN START_OBJECT { success null
+                       (23)FIELD_NAME null  => 200: 200
+ <--- 0
+                      (22)START array: START_ARRAY [ { 200 null END_ARRAY ] null
+                       (23)BEGIN END_ARRAY ] 200 null
+                       (23)end END_OBJECT }
+                       (23)BEGIN END_OBJECT } success null
+                       (23)end END_OBJECT }
+                       (23)BEGIN END_OBJECT } null null
+                       (23)end END_ARRAY ]
+                       (23)BEGIN END_ARRAY ] responseValidators null
+                        (24)FIELD_NAME null  => pipes: pipes
+ <--- 0
+                       (23)START array: START_ARRAY [ ] pipes null START_OBJECT { null
+                        (24)BEGIN START_OBJECT { null null
+                         (25)FIELD_NAME null  => type: type
+                        (24) fieldValue: VALUE_STRING -> type: Sequence
+ <--- 1
+                        (24)END fieldValue: START_OBJECT -> splitQuery: null
+                         (25)BEGIN START_OBJECT { splitQuery null
+                          (26)FIELD_NAME null  => type: type
+                         (25) fieldValue: VALUE_STRING -> type: QueryXPath
+                         (25) fieldValue: VALUE_STRING -> expression: /feed/entry
+ <--- 2
+                         (25)END fieldValue: END_OBJECT -> splitQuery: null
+                          (26)BEGIN END_OBJECT } splitQuery null
+                           (27)FIELD_NAME null  => expectedQuery: expectedQuery
+ <--- 0
+                          (26)END fieldValue: START_OBJECT -> expectedQuery: null
+                           (27)BEGIN START_OBJECT { expectedQuery null
+                            (28)FIELD_NAME null  => type: type
+                           (27) fieldValue: VALUE_STRING -> type: QueryXPath
+                           (27) fieldValue: VALUE_STRING -> expression: /entry/id
+ <--- 2
+                           (27)END fieldValue: END_OBJECT -> expectedQuery: null
+                            (28)BEGIN END_OBJECT } expectedQuery null
+                            (28)end END_OBJECT }
+                            (28)BEGIN END_OBJECT } null null
+                            (28)--> START_OBJECT: START_OBJECT {  null null
+                            (28)end START_OBJECT {
+                            (28)BEGIN START_OBJECT { null null
+                             (29)FIELD_NAME null  => type: type
+                            (28) fieldValue: VALUE_STRING -> type: NextPage
+ <--- 1
+                            (28)END fieldValue: START_OBJECT -> outputs: null
+                             (29)BEGIN START_OBJECT { outputs null
+                              (30)FIELD_NAME null  => nextMarker: nextMarker
+ <--- 0
+                             (29)END fieldValue: START_OBJECT -> nextMarker: null
+                              (30)BEGIN START_OBJECT { nextMarker null
+                               (31)FIELD_NAME null  => type: type
+                              (30) fieldValue: VALUE_STRING -> type: QueryRegEx
+                              (30) fieldValue: VALUE_STRING -> expression: (?<=[?&]marker=)[^&]*
+ <--- 2
+                              (30)END fieldValue: START_OBJECT -> query: null
+                               (31)BEGIN START_OBJECT { query null
+                                (32)FIELD_NAME null  => type: type
+                               (31) fieldValue: VALUE_STRING -> type: QueryXPath
+                               (31) fieldValue: VALUE_STRING -> expression: /feed/link[@rel="previous"]/@href
+ <--- 2
+                               (31)END fieldValue: END_OBJECT -> query: null
+                                (32)BEGIN END_OBJECT } query null
+                                (32)end END_OBJECT }
+                                (32)BEGIN END_OBJECT } nextMarker null
+                                (32)end END_OBJECT }
+                                (32)BEGIN END_OBJECT } outputs null
+                                (32)end END_OBJECT }
+                                (32)BEGIN END_OBJECT } null null
+                                (32)--> START_OBJECT: START_OBJECT {  null null
+                                (32)end START_OBJECT {
+                                (32)BEGIN START_OBJECT { null null
+                                 (33)FIELD_NAME null  => type: type
+                                (32) fieldValue: VALUE_STRING -> type: Parallel
+ <--- 1
+                                (32)END fieldValue: START_OBJECT -> variables: null
+                                 (33)BEGIN START_OBJECT { variables null
+                                  (34)FIELD_NAME null  => position: position
+ <--- 0
+                                 (33)END fieldValue: START_OBJECT -> position: null
+                                  (34)BEGIN START_OBJECT { position null
+                                   (35)FIELD_NAME null  => type: type
+                                  (34) fieldValue: VALUE_STRING -> type: QueryXPath
+                                  (34) fieldValue: VALUE_STRING -> expression: /entry/id
+ <--- 2
+                                  (34)END fieldValue: END_OBJECT -> position: null
+                                   (35)BEGIN END_OBJECT } position null
+                                   (35)end END_OBJECT }
+                                   (35)BEGIN END_OBJECT } variables null
+                                    (36)FIELD_NAME null  => splitQuery: splitQuery
+ <--- 0
+                                   (35)END fieldValue: START_OBJECT -> splitQuery: null
+                                    (36)BEGIN START_OBJECT { splitQuery null
+                                     (37)FIELD_NAME null  => type: type
+                                    (36) fieldValue: VALUE_STRING -> type: QueryXPath
+                                    (36) fieldValue: VALUE_STRING -> expression: /feed/entry
+ <--- 2
+                                    (36)END fieldValue: END_OBJECT -> splitQuery: null
+                                     (37)BEGIN END_OBJECT } splitQuery null
+                                      (38)FIELD_NAME null  => pipes: pipes
+ <--- 0
+                                     (37)START array: START_ARRAY [ } pipes null START_OBJECT { null
+                                      (38)BEGIN START_OBJECT { null null
+                                       (39)FIELD_NAME null  => type: type
+                                      (38) fieldValue: VALUE_STRING -> type: AddContent
+                                      (38) fieldValue: VALUE_STRING -> positionVariableExpression: ${position}
+                                      (38) fieldValue: VALUE_STRING -> contentKey: entry
+ <--- 3
+                                      (38)END fieldValue: END_OBJECT -> null: null
+                                       (39)BEGIN END_OBJECT } null null
+                                       (39)--> START_OBJECT: START_OBJECT {  null null
+                                       (39)end START_OBJECT {
+                                       (39)BEGIN START_OBJECT { null null
+                                        (40)FIELD_NAME null  => type: type
+                                       (39) fieldValue: VALUE_STRING -> type: Publish
+                                       (39) fieldValue: VALUE_STRING -> positionVariableExpression: ${position}
+ <--- 2
+                                       (39)END fieldValue: END_OBJECT -> null: null
+                                        (40)BEGIN END_OBJECT } null null
+                                        (40)end END_ARRAY ]
+                                        (40)BEGIN END_ARRAY ] pipes null
+                                        (40)end END_OBJECT }
+                                        (40)BEGIN END_OBJECT } null null
+                                        (40)end END_ARRAY ]
+                                        (40)BEGIN END_ARRAY ] pipes null
+                                        (40)end END_OBJECT }
+                                        (40)BEGIN END_OBJECT } event-list null
+                                        (40)end END_OBJECT }
+                                        (40)BEGIN END_OBJECT } functions null
+                                        (40)end END_OBJECT }
+                                        (40)BEGIN END_OBJECT } null null
+                                       (39)end FIELD_NAME null
+                                      (38)end FIELD_NAME null
+                                     (37)END fieldValue: START_ARRAY -> null: null
+                                     (37)end FIELD_NAME null
+                                    (36)end FIELD_NAME null
+                                   (35)end FIELD_NAME null
+                                  (34)end FIELD_NAME null
+                                 (33)end FIELD_NAME null
+                                (32)end FIELD_NAME null
+                               (31)end FIELD_NAME null
+                              (30)end FIELD_NAME null
+                             (29)end FIELD_NAME null
+                            (28)end FIELD_NAME null
+                           (27)end FIELD_NAME null
+                          (26)end FIELD_NAME null
+                         (25)end FIELD_NAME null
+                        (24)end FIELD_NAME null
+                       (23)END fieldValue: START_ARRAY -> null: null
+                       (23)end FIELD_NAME null
+                      (22)END fieldValue: START_ARRAY -> null: null
+                      (22)end FIELD_NAME null
+                     (21)end FIELD_NAME null
+                    (20)END fieldValue: START_ARRAY -> null: null
+                    (20)end FIELD_NAME null
+                   (19)END fieldValue: START_ARRAY -> null: null
+                   (19)end FIELD_NAME null
+                  (18)end FIELD_NAME null
+                 (17)end FIELD_NAME null
+                (16)end FIELD_NAME null
+               (15)end FIELD_NAME null
+              (14)END fieldValue: START_ARRAY -> null: null
+              (14)end FIELD_NAME null
+             (13)end FIELD_NAME null
+            (12)end FIELD_NAME null
+           (11)end FIELD_NAME null
+          (10)end FIELD_NAME null
+         (9)end FIELD_NAME null
+        (8)end FIELD_NAME null
+       (7)end FIELD_NAME null
+      (6)END fieldValue: START_ARRAY -> null: null
+      (6)end FIELD_NAME null
+     (5)end FIELD_NAME null
+    (4)end FIELD_NAME null
+   (3)end FIELD_NAME null
+  (2)end FIELD_NAME null
+ (1)end FIELD_NAME null
+(0)END fieldValue: START_ARRAY -> null: null
+(0)end FIELD_NAME null
+
+14:09:00.834 [main] TRACE n.s.d.a.n.b.GenericNodeBuilderDeserializer - Builder: no.ssb.dc.api.node.builder.GenericNodeBuilderDeserializer$Node$Builder@79d94571
+14:09:00.837 [main] TRACE n.s.d.a.n.b.GenericNodeBuilderDeserializer - Spec-path: /Users/oranheim/IdeaProjects/ssb/data-collector-project/data-collection-consumer-specifications/specs/toll-tvinn-test-spec.json
+{
+  "type" : "Specification",
+  "name" : "Collect Tvinn",
+  "startFunctionId" : "loop",
+  "id": "TOLL-TVINN",
+  "configure" : [ {
+    "type" : "SpecificationContext",
+    "variables" : {
+      "TestURL" : "https://mp-at.toll.no",
+      "ProduksjonURL" : "https://mp-sit.toll.no",
+      "nextMarker" : "${contentStream.hasLastPosition() ? contentStream.lastPosition() : \"last\"}"
+    },
+    "globalState" : {
+      "global.topic" : "tvinn-test"
+    },
+    "headers" : {
+      "accept" : [ "application/xml" ]
+    }
+  }, {
+    "type" : "Security",
+    "bundleName" : "toll-test-certs"
+  } ],
+  "functions" : {
+    "loop" : {
+      "type" : "Paginate",
+      "id" : "loop",
+      "variables" : {
+        "fromMarker" : "${nextMarker}"
+      },
+      "threshold" : 150,
+      "addPageContent" : true,
+      "iterate" : [ {
+        "type" : "Execute",
+        "executeId" : "event-list"
+      } ],
+      "until" : {
+        "type" : "ConditionWhenVariableIsNull",
+        "identifier" : "nextMarker"
+      }
+    },
+    "event-list" : {
+      "type" : "Get",
+      "id" : "event-list",
+      "url" : "${TestURL}/atomfeed/toll/deklarasjon-ekstern-feed/?marker=${fromMarker}&limit=25&direction=forward",
+      "returnVariables" : [ "nextMarker" ],
+      "responseValidators" : [ {
+        "type" : "HttpStatusValidation",
+        "success" : {
+          "200" : [ ]
+        }
+      } ],
+      "pipes" : [ {
+        "type" : "Sequence",
+        "splitQuery" : {
+          "type" : "QueryXPath",
+          "expression" : "/feed/entry"
+        },
+        "expectedQuery" : {
+          "type" : "QueryXPath",
+          "expression" : "/entry/id"
+        }
+      }, {
+        "type" : "NextPage",
+        "outputs" : {
+          "nextMarker" : {
+            "type" : "QueryRegEx",
+            "expression" : "(?<=[?&]marker=)[^&]*",
+            "query" : {
+              "type" : "QueryXPath",
+              "expression" : "/feed/link[@rel=\"previous\"]/@href"
+            }
+          }
+        }
+      }, {
+        "type" : "Parallel",
+        "variables" : {
+          "position" : {
+            "type" : "QueryXPath",
+            "expression" : "/entry/id"
+          }
+        },
+        "splitQuery" : {
+          "type" : "QueryXPath",
+          "expression" : "/feed/entry"
+        },
+        "pipes" : [ {
+          "type" : "AddContent",
+          "positionVariableExpression" : "${position}",
+          "contentKey" : "entry"
+        }, {
+          "type" : "Publish",
+          "positionVariableExpression" : "${position}"
+        } ]
+      } ]
+    }
+  }
+}
+
+
+Process finished with exit code 0
