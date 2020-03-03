@@ -67,10 +67,10 @@ public class GenericNodeBuilderDeserializer extends StdDeserializer<GenericNodeB
 
         } else if (fieldToken == JsonToken.FIELD_NAME) {
             JsonToken nextValue;
-            while (PropertyType.isValueToken((nextValue = parser.nextValue()))) {
-                Property.Builder propertyBuilder = new Property.Builder();
+            while (FieldType.isValueToken((nextValue = parser.nextValue()))) {
+                Field.Builder propertyBuilder = new Field.Builder();
                 propertyBuilder.name(parser.currentName());
-                propertyBuilder.value(parser.getCurrentValue(), PropertyType.of(nextValue));
+//                propertyBuilder.value(parser.getCurrentValue(), FieldType.of(nextValue));
 //                currentElementBuilder.addProperty(propertyBuilder);
             }
 
@@ -111,9 +111,9 @@ public class GenericNodeBuilderDeserializer extends StdDeserializer<GenericNodeB
             JsonToken nextValue;
             int n = 0;
             while ((nextValue = parser.nextValue()) == JsonToken.VALUE_STRING) {
-                Property.Builder propertyBuilder = new Property.Builder();
-                propertyBuilder.name(parser.currentName());
-                propertyBuilder.value(parser.getValueAsString(), PropertyType.of(nextValue));
+//                Field.Builder propertyBuilder = new Field.Builder();
+//                propertyBuilder.name(parser.currentName());
+//                propertyBuilder.value(parser.getValueAsString(), FieldType.of(nextValue));
 
                 builder(depth, builder).append(" fieldValue: ").append(nextValue.name()).append(" -> ").append(parser.currentName()).append(": ").append(parser.getValueAsString()).append("\n");
                 n++;
@@ -144,7 +144,7 @@ public class GenericNodeBuilderDeserializer extends StdDeserializer<GenericNodeB
         Object, Array, Values
      */
 
-    enum PropertyType {
+    enum FieldType {
         STRING(JsonToken.VALUE_STRING),
         INTEGER(JsonToken.VALUE_NUMBER_INT),
         FLOAT(JsonToken.VALUE_NUMBER_FLOAT),
@@ -152,12 +152,12 @@ public class GenericNodeBuilderDeserializer extends StdDeserializer<GenericNodeB
 
         private final List<JsonToken> jsonTokenList;
 
-        PropertyType(JsonToken... jsonToken) {
+        FieldType(JsonToken... jsonToken) {
             jsonTokenList = List.of(jsonToken);
         }
 
-        static PropertyType of(JsonToken jsonToken) {
-            for (PropertyType type : values()) {
+        static FieldType of(JsonToken jsonToken) {
+            for (FieldType type : values()) {
                 if (type.jsonTokenList.contains(jsonToken)) {
                     return type;
                 }
@@ -166,7 +166,7 @@ public class GenericNodeBuilderDeserializer extends StdDeserializer<GenericNodeB
         }
 
         static boolean isValueToken(JsonToken jsonToken) {
-            for (PropertyType type : values()) {
+            for (FieldType type : values()) {
                 if (type.jsonTokenList.contains(jsonToken)) {
                     return true;
                 }
@@ -196,15 +196,27 @@ public class GenericNodeBuilderDeserializer extends StdDeserializer<GenericNodeB
         }
     }
 
-    static class Array extends Base {
+    interface NodeItem {
+        interface Builder {
 
-        static class Builder extends Base.Builder {
-            private final List<Node> nodeList = new ArrayList<>();
+        }
+    }
+
+    interface ArrayItem {
+        interface Builder {
+
+        }
+    }
+
+    static class Array implements NodeItem {
+
+        static class Builder implements NodeItem.Builder {
+            private final List<ArrayItem> nodeList = new ArrayList<>();
 
             public Builder() {
             }
 
-            Builder node(Node node) {
+            Builder node(ArrayItem node) {
                 nodeList.add(node);
                 return this;
             }
@@ -215,11 +227,11 @@ public class GenericNodeBuilderDeserializer extends StdDeserializer<GenericNodeB
         }
     }
 
-    static class Node {
+    static class Node implements NodeItem, ArrayItem{
         public final String name;
-        public final Map<String, ? extends Base> children;
+        public final Map<String, Base> children;
 
-        public Node(String name, Map<String, ? extends Base> children) {
+        public Node(String name, Map<String, Base> children) {
             this.name = name;
             this.children = children;
         }
@@ -232,7 +244,7 @@ public class GenericNodeBuilderDeserializer extends StdDeserializer<GenericNodeB
                     '}';
         }
 
-        static class Builder {
+        static class Builder implements NodeItem.Builder, ArrayItem.Builder {
             private String name;
             private final Map<String, Base.Builder> children = new LinkedHashMap<>();
 
@@ -258,22 +270,51 @@ public class GenericNodeBuilderDeserializer extends StdDeserializer<GenericNodeB
         }
     }
 
-    public static class Property extends Base {
+    public static class Field extends Base {
         public final String name;
-        public final Object value;
-        public final PropertyType type;
+        public final Value value;
 
         @Override
         public String toString() {
-            return "Property{" +
+            return "Field{" +
                     "name='" + name + '\'' +
                     ", value=" + value +
-                    ", type=" + type +
                     '}';
         }
 
-        public Property(String name, Object value, PropertyType type) {
+        public Field(String name, Value value) {
             this.name = name;
+            this.value = value;
+        }
+
+        static class Builder extends Base.Builder {
+            private String name;
+            private Value value;
+
+            public Builder() {
+            }
+
+            Builder name(String name) {
+                this.name = name;
+                return this;
+            }
+
+            Builder value(Value value) {
+                this.value = value;
+                return this;
+            }
+
+            Field build() {
+                return new Field(name, value);
+            }
+        }
+    }
+
+    static class Value {
+        private final Object value;
+        private final FieldType type;
+
+        public Value(Object value, FieldType type) {
             this.value = value;
             this.type = type;
         }
@@ -294,28 +335,12 @@ public class GenericNodeBuilderDeserializer extends StdDeserializer<GenericNodeB
             return (Boolean) value;
         }
 
-        static class Builder extends Base.Builder {
-            private String name;
-            private Object value;
-            private PropertyType type;
-
-            public Builder() {
-            }
-
-            Builder name(String name) {
-                this.name = name;
-                return this;
-            }
-
-            Builder value(Object value, PropertyType type) {
-                this.value = value;
-                this.type = type;
-                return this;
-            }
-
-            Property build() {
-                return new Property(name, value, type);
-            }
+        @Override
+        public String toString() {
+            return "Value{" +
+                    "value=" + value +
+                    ", type=" + type +
+                    '}';
         }
     }
 }
