@@ -10,6 +10,7 @@ import no.ssb.dc.api.node.builder.JqPathBuilder;
 import no.ssb.dc.api.node.builder.NextPageBuilder;
 import no.ssb.dc.api.node.builder.PaginateBuilder;
 import no.ssb.dc.api.node.builder.ParallelBuilder;
+import no.ssb.dc.api.node.builder.PostBuilder;
 import no.ssb.dc.api.node.builder.ProcessBuilder;
 import no.ssb.dc.api.node.builder.PublishBuilder;
 import no.ssb.dc.api.node.builder.QueryBuilder;
@@ -32,6 +33,10 @@ public class Builders {
 
     public static GetBuilder get(String functionId) {
         return new GetBuilder(functionId);
+    }
+
+    public static PostBuilder post(String functionId) {
+        return new PostBuilder(functionId);
     }
 
     public static HttpStatusValidationBuilder status() {

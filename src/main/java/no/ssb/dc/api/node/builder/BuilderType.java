@@ -18,6 +18,7 @@ public enum BuilderType {
     AddContent,
     Publish,
     Get,
+    Post,
     HttpStatusValidation,
     HttpResponseBodyContains;
 

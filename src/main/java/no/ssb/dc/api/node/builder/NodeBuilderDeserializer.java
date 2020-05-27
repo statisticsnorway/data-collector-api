@@ -263,6 +263,30 @@ public class NodeBuilderDeserializer extends StdDeserializer<AbstractBuilder> {
                 return builder;
             }
 
+            case Post: {
+                PostBuilder builder = new PostBuilder(currentNode.get("id").textValue());
+
+                builder.url(currentNode.get("url").textValue());
+
+                JsonNode validateResponseNode = currentNode.get("responseValidators");
+                if (validateResponseNode != null) {
+                    validateResponseNode.forEach(validatorNode -> {
+                        LeafNodeBuilder validatorBuilder = (LeafNodeBuilder) handleNodeBuilder(depth + 1, context, ancestors, currentNode, validatorNode);
+                        builder.validate(validatorBuilder);
+                    });
+                }
+
+                ArrayNode returnVariablesNode = (ArrayNode) currentNode.get("returnVariables");
+                if (returnVariablesNode != null) {
+                    returnVariablesNode.forEach(node -> builder.returnVariables(node.textValue()));
+                }
+
+                JsonNode stepsNode = currentNode.get("pipes");
+                stepsNode.forEach(stepNode -> builder.pipe((NodeBuilder) handleNodeBuilder(depth + 1, context, ancestors, currentNode, stepNode)));
+
+                return builder;
+            }
+
             case HttpStatusValidation: {
                 HttpStatusValidationBuilder builder = new HttpStatusValidationBuilder();
 
