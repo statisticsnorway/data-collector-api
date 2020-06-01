@@ -2,6 +2,7 @@ package no.ssb.dc.api;
 
 import no.ssb.dc.api.node.builder.AddContentBuilder;
 import no.ssb.dc.api.node.builder.BodyContainsBuilder;
+import no.ssb.dc.api.node.builder.BodyPublisherBuilder;
 import no.ssb.dc.api.node.builder.EvalBuilder;
 import no.ssb.dc.api.node.builder.ExecuteBuilder;
 import no.ssb.dc.api.node.builder.GetBuilder;
@@ -41,6 +42,10 @@ public class Builders {
 
     public static HttpStatusValidationBuilder status() {
         return new HttpStatusValidationBuilder();
+    }
+
+    public static BodyPublisherBuilder bodyPublisher() {
+        return new BodyPublisherBuilder();
     }
 
     public static BodyContainsBuilder bodyContains(QueryBuilder queryBuilder, String equalToStringLiteral) {

@@ -20,6 +20,7 @@ public enum BuilderType {
     Get,
     Post,
     HttpStatusValidation,
+    BodyPublisher,
     HttpResponseBodyContains;
 
     public static BuilderType parse(String name) {

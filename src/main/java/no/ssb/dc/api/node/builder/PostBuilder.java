@@ -3,10 +3,10 @@ package no.ssb.dc.api.node.builder;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import no.ssb.dc.api.http.Headers;
 import no.ssb.dc.api.node.Base;
+import no.ssb.dc.api.node.BodyPublisher;
 import no.ssb.dc.api.node.Configurations;
 import no.ssb.dc.api.node.Node;
 import no.ssb.dc.api.node.Post;
-import no.ssb.dc.api.node.PostData;
 import no.ssb.dc.api.node.Validator;
 
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ import static no.ssb.dc.api.Builders.status;
 public class PostBuilder extends OperationBuilder {
 
     @JsonProperty Headers requestHeaders = new Headers();
-    @JsonProperty("content") PostData data = new PostData();
+    @JsonProperty("bodyPublisher") BodyPublisherBuilder bodyPublisherBuilder;
     @JsonProperty("responseValidators") List<LeafNodeBuilder> validators = new ArrayList<>();
     @JsonProperty("pipes") List<NodeBuilder> pipes = new ArrayList<>();
     @JsonProperty List<String> returnVariables = new ArrayList<>();
@@ -48,7 +48,8 @@ public class PostBuilder extends OperationBuilder {
         return this;
     }
 
-    public PostBuilder data(String text) {
+    public PostBuilder data(BodyPublisherBuilder bodyPublisherBuilder) {
+        this.bodyPublisherBuilder = bodyPublisherBuilder;
         return this;
     }
 
@@ -72,6 +73,8 @@ public class PostBuilder extends OperationBuilder {
     @SuppressWarnings("unchecked")
     @Override
     <R extends Base> R build(BuildContext buildContext) {
+        BodyPublisher bodyPublisher = bodyPublisherBuilder == null ? null : bodyPublisherBuilder.build(buildContext);
+
         List<Validator> validators = new ArrayList<>();
 
         // add default http status validator if unassigned
@@ -90,7 +93,7 @@ public class PostBuilder extends OperationBuilder {
             stepNodeList.add(stepNode);
         }
 
-        return (R) new PostBuilder.PostNode(getId(), buildContext.getInstance(SpecificationBuilder.GLOBAL_CONFIGURATION), url, requestHeaders, validators, stepNodeList, returnVariables);
+        return (R) new PostBuilder.PostNode(getId(), buildContext.getInstance(SpecificationBuilder.GLOBAL_CONFIGURATION), url, requestHeaders, bodyPublisher, validators, stepNodeList, returnVariables);
     }
 
     @Override
@@ -128,12 +131,14 @@ public class PostBuilder extends OperationBuilder {
         final Headers headers;
         final List<Node> pipes;
         final List<String> returnVariables;
-        private final List<Validator> validateResponse;
+        final BodyPublisher bodyPublisher;
+        final List<Validator> validateResponse;
 
-        PostNode(String id, Configurations configurations, String url, Headers headers, List<Validator> validateResponse, List<Node> pipes, List<String> returnVariables) {
+        PostNode(String id, Configurations configurations, String url, Headers headers, BodyPublisher bodyPublisher, List<Validator> validateResponse, List<Node> pipes, List<String> returnVariables) {
             super(configurations, id);
             this.url = url;
             this.headers = headers;
+            this.bodyPublisher = bodyPublisher;
             this.validateResponse = validateResponse;
             this.pipes = pipes;
             this.returnVariables = returnVariables;
@@ -150,13 +155,8 @@ public class PostBuilder extends OperationBuilder {
         }
 
         @Override
-        public void data(String text) {
-
-        }
-
-        @Override
-        public void data(byte[] bytes) {
-
+        public BodyPublisher bodyPublisher() {
+            return bodyPublisher;
         }
 
         @Override
@@ -183,31 +183,30 @@ public class PostBuilder extends OperationBuilder {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-            PostBuilder.PostNode postNode = (PostBuilder.PostNode) o;
+            PostNode postNode = (PostNode) o;
             return Objects.equals(url, postNode.url) &&
                     Objects.equals(headers, postNode.headers) &&
-                    Objects.equals(validateResponse, postNode.validateResponse) &&
                     Objects.equals(pipes, postNode.pipes) &&
-                    Objects.equals(returnVariables, postNode.returnVariables);
+                    Objects.equals(returnVariables, postNode.returnVariables) &&
+                    Objects.equals(bodyPublisher, postNode.bodyPublisher) &&
+                    Objects.equals(validateResponse, postNode.validateResponse);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(url, headers, validateResponse, pipes, returnVariables);
+            return Objects.hash(url, headers, pipes, returnVariables, bodyPublisher, validateResponse);
         }
 
         @Override
         public String toString() {
             return "PostNode{" +
-                    "id='" + id + '\'' +
-                    ", url='" + url + '\'' +
+                    "url='" + url + '\'' +
                     ", headers=" + headers +
-                    ", validateResponse=" + validateResponse +
-                    ", steps=" + pipes +
+                    ", pipes=" + pipes +
                     ", returnVariables=" + returnVariables +
+                    ", bodyPublisher=" + bodyPublisher +
+                    ", validateResponse=" + validateResponse +
                     '}';
         }
-
-
     }
 }
