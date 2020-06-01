@@ -103,6 +103,7 @@ public class PostBuilder extends OperationBuilder {
         if (!super.equals(o)) return false;
         PostBuilder that = (PostBuilder) o;
         return Objects.equals(requestHeaders, that.requestHeaders) &&
+                Objects.equals(bodyPublisherBuilder, that.bodyPublisherBuilder) &&
                 Objects.equals(validators, that.validators) &&
                 Objects.equals(pipes, that.pipes) &&
                 Objects.equals(returnVariables, that.returnVariables);
@@ -110,15 +111,14 @@ public class PostBuilder extends OperationBuilder {
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), requestHeaders, validators, pipes, returnVariables);
+        return Objects.hash(super.hashCode(), requestHeaders, bodyPublisherBuilder, validators, pipes, returnVariables);
     }
 
     @Override
     public String toString() {
         return "PostBuilder{" +
-                "id='" + id + '\'' +
-                ", url='" + url + '\'' +
-                ", requestHeaders=" + requestHeaders +
+                "requestHeaders=" + requestHeaders +
+                ", bodyPublisherBuilder=" + bodyPublisherBuilder +
                 ", validators=" + validators +
                 ", pipes=" + pipes +
                 ", returnVariables=" + returnVariables +

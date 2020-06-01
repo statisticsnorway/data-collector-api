@@ -1,6 +1,9 @@
 package no.ssb.dc.api.node;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.nio.charset.Charset;
+import java.util.Objects;
 
 public class BodyPart {
 
@@ -23,12 +26,39 @@ public class BodyPart {
         this.charset = charset;
     }
 
+    @JsonIgnore
     public boolean isTextPart() {
         return filename == null;
     }
 
+    @JsonIgnore
     public boolean isFormPart() {
         return filename != null;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BodyPart part = (BodyPart) o;
+        return Objects.equals(name, part.name) &&
+                Objects.equals(filename, part.filename) &&
+                Objects.equals(value, part.value) &&
+                Objects.equals(charset, part.charset);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, filename, value, charset);
+    }
+
+    @Override
+    public String toString() {
+        return "BodyPart{" +
+                "name='" + name + '\'' +
+                ", filename='" + filename + '\'' +
+                ", value=" + value +
+                ", charset=" + charset +
+                '}';
+    }
 }

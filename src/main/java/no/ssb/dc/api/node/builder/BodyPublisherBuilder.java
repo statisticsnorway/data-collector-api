@@ -17,9 +17,9 @@ import java.util.Objects;
 public class BodyPublisherBuilder extends OperationPublisherBuilder {
 
     @JsonIgnore FormEncoding encoding;
-    @JsonProperty("textPart") String plainText;
+    @JsonProperty("plainTextData") String plainText;
     @JsonProperty("urlEncodedData") String urlEncodedData;
-    @JsonProperty("parts") List<BodyPart> parts = new ArrayList<>();
+    @JsonProperty("partsData") List<BodyPart> parts = new ArrayList<>();
 
     public BodyPublisherBuilder() {
         super(BuilderType.BodyPublisher);
@@ -64,19 +64,23 @@ public class BodyPublisherBuilder extends OperationPublisherBuilder {
         if (!super.equals(o)) return false;
         BodyPublisherBuilder that = (BodyPublisherBuilder) o;
         return encoding == that.encoding &&
-                Objects.equals(plainText, that.plainText);
+                Objects.equals(plainText, that.plainText) &&
+                Objects.equals(urlEncodedData, that.urlEncodedData) &&
+                Objects.equals(parts, that.parts);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), encoding, plainText);
+        return Objects.hash(super.hashCode(), encoding, plainText, urlEncodedData, parts);
     }
 
     @Override
     public String toString() {
         return "BodyPublisherBuilder{" +
                 "encoding=" + encoding +
-                ", text='" + plainText + '\'' +
+                ", plainText='" + plainText + '\'' +
+                ", urlEncodedData='" + urlEncodedData + '\'' +
+                ", parts=" + parts +
                 '}';
     }
 
@@ -120,19 +124,23 @@ public class BodyPublisherBuilder extends OperationPublisherBuilder {
             if (o == null || getClass() != o.getClass()) return false;
             BodyPublisherNode that = (BodyPublisherNode) o;
             return encoding == that.encoding &&
-                    Objects.equals(plainText, that.plainText);
+                    Objects.equals(plainText, that.plainText) &&
+                    Objects.equals(urlEncodedData, that.urlEncodedData) &&
+                    Objects.equals(parts, that.parts);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(encoding, plainText);
+            return Objects.hash(encoding, plainText, urlEncodedData, parts);
         }
 
         @Override
         public String toString() {
             return "BodyPublisherNode{" +
                     "encoding=" + encoding +
-                    ", textPart='" + plainText + '\'' +
+                    ", plainText='" + plainText + '\'' +
+                    ", urlEncodedData='" + urlEncodedData + '\'' +
+                    ", parts=" + parts +
                     '}';
         }
     }
