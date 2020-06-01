@@ -1,7 +1,7 @@
-package no.ssb.dc.api;
+package no.ssb.dc.api.el;
 
+import no.ssb.dc.api.ConfigurationMap;
 import no.ssb.dc.api.context.ExecutionContext;
-import no.ssb.dc.api.el.ExpressionLanguage;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -23,7 +23,7 @@ public class ExpressionLanguageTest {
     }
 
     @Test
-    void testCustomContext() {
+    public void testCustomContext() {
         ExecutionContext context = ExecutionContext.empty();
         Map<String, String> map = new LinkedHashMap<>();
         map.put("foo", "bar");
