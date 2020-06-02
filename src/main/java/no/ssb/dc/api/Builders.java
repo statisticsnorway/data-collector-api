@@ -111,7 +111,7 @@ public class Builders {
         return new WhenVariableIsNullBuilder().identifier(identifier);
     }
 
-    public static WhenExpressionIsTrueBuilder whenExpressionIsNotTrue(String expression) {
+    public static WhenExpressionIsTrueBuilder whenExpressionIsTrue(String expression) {
         return new WhenExpressionIsTrueBuilder().identifier(expression);
     }
 }
