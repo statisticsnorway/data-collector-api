@@ -246,6 +246,12 @@ public class NodeBuilderDeserializer extends StdDeserializer<AbstractBuilder> {
                 return builder;
             }
 
+            case ConditionWhenExpressionIsTrue: {
+                WhenExpressionIsTrueBuilder builder = new WhenExpressionIsTrueBuilder();
+                builder.identifier(currentNode.get("identifier").textValue());
+                return builder;
+            }
+
             case AddContent: {
                 return new AddContentBuilder(currentNode.get("positionVariableExpression").textValue(), currentNode.get("contentKey").textValue());
             }

@@ -15,6 +15,7 @@ public enum BuilderType {
     QueryJqPath,
     QueryRegEx,
     ConditionWhenVariableIsNull,
+    ConditionWhenExpressionIsTrue,
     AddContent,
     Publish,
     Get,

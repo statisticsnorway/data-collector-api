@@ -19,6 +19,7 @@ import no.ssb.dc.api.node.builder.RegExBuilder;
 import no.ssb.dc.api.node.builder.SecurityBuilder;
 import no.ssb.dc.api.node.builder.SequenceBuilder;
 import no.ssb.dc.api.node.builder.SpecificationContextBuilder;
+import no.ssb.dc.api.node.builder.WhenExpressionIsTrueBuilder;
 import no.ssb.dc.api.node.builder.WhenVariableIsNullBuilder;
 import no.ssb.dc.api.node.builder.XPathBuilder;
 
@@ -108,5 +109,9 @@ public class Builders {
 
     public static WhenVariableIsNullBuilder whenVariableIsNull(String identifier) {
         return new WhenVariableIsNullBuilder().identifier(identifier);
+    }
+
+    public static WhenExpressionIsTrueBuilder whenExpressionIsNotTrue(String expression) {
+        return new WhenExpressionIsTrueBuilder().identifier(expression);
     }
 }
