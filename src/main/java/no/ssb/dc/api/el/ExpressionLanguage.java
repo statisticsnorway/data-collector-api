@@ -49,7 +49,9 @@ public class ExpressionLanguage {
 
     // doc: http://commons.apache.org/proper/commons-jexl/reference/examples.html
     void initializeJexlFunctions(JexlContext jexlContext) {
-        jexlContext.set("ENV", new MapContext(new LinkedHashMap<>(configuration.asMap()))); // TODO dotted EL-vars not supported
+        if (configuration != null) {
+            jexlContext.set("ENV", new MapContext(new LinkedHashMap<>(configuration.asMap()))); // TODO dotted EL-vars not supported
+        }
         jexlContext.set("cast", new ELCast());
         jexlContext.set("contentStream", new ELContentStream(evaluateLastContentStreamPosition));
     }
