@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import no.ssb.dc.api.node.Base;
 import no.ssb.dc.api.node.BodyPart;
 import no.ssb.dc.api.node.BodyPublisher;
+import no.ssb.dc.api.node.BodyPublisherProducer;
 import no.ssb.dc.api.node.FormEncoding;
 
 import java.nio.charset.StandardCharsets;
@@ -17,8 +18,8 @@ import java.util.Objects;
 public class BodyPublisherBuilder extends OperationPublisherBuilder {
 
     @JsonIgnore FormEncoding encoding;
-    @JsonProperty("plainTextData") String plainText;
-    @JsonProperty("urlEncodedData") String urlEncodedData;
+    @JsonProperty("plainTextData") BodyPublisherProducerBuilder plainText;
+    @JsonProperty("urlEncodedData") BodyPublisherProducerBuilder urlEncodedData;
     @JsonProperty("partsData") List<BodyPart> parts = new ArrayList<>();
 
     public BodyPublisherBuilder() {
@@ -26,13 +27,19 @@ public class BodyPublisherBuilder extends OperationPublisherBuilder {
     }
 
     public BodyPublisherBuilder plainText(String text) {
-        this.plainText = text;
+        this.plainText = new StringBodyPublisherProducerBuilder(text);
         this.encoding = FormEncoding.TEXT_PLAIN;
         return this;
     }
 
-    public BodyPublisherBuilder urlEncodedData(String data) {
-        this.urlEncodedData = data;
+    public BodyPublisherBuilder urlEncoded(String data) {
+        this.urlEncodedData = new StringBodyPublisherProducerBuilder(data);
+        this.encoding = FormEncoding.APPLICATION_X_WWW_FORM_URLENCODED;
+        return this;
+    }
+
+    public BodyPublisherBuilder urlEncoded(IdentityTokenBuilder identityTokenBuilder) {
+        this.urlEncodedData = identityTokenBuilder;
         this.encoding = FormEncoding.APPLICATION_X_WWW_FORM_URLENCODED;
         return this;
     }
@@ -57,7 +64,9 @@ public class BodyPublisherBuilder extends OperationPublisherBuilder {
 
     @Override
     public <R extends Base> R build(BuildContext buildContext) {
-        return (R) new BodyPublisherNode(encoding, plainText, urlEncodedData, parts);
+        BodyPublisherProducer plainTextProducer = plainText == null ? null : plainText.build(buildContext);
+        BodyPublisherProducer urlEncodedDataProducer = urlEncodedData == null ? null : urlEncodedData.build(buildContext);
+        return (R) new BodyPublisherNode(encoding, plainTextProducer, urlEncodedDataProducer, parts);
     }
 
     @Override
@@ -90,11 +99,11 @@ public class BodyPublisherBuilder extends OperationPublisherBuilder {
     static class BodyPublisherNode extends LeafNode implements BodyPublisher {
 
         private final FormEncoding encoding;
-        private final String plainText;
-        private final String urlEncodedData;
+        private final BodyPublisherProducer plainText;
+        private final BodyPublisherProducer urlEncodedData;
         private final List<BodyPart> parts;
 
-        public BodyPublisherNode(FormEncoding encoding, String plainText, String urlEncodedData, List<BodyPart> parts) {
+        public BodyPublisherNode(FormEncoding encoding, BodyPublisherProducer plainText, BodyPublisherProducer urlEncodedData, List<BodyPart> parts) {
             this.encoding = encoding;
             this.plainText = plainText;
             this.urlEncodedData = urlEncodedData;
@@ -107,12 +116,12 @@ public class BodyPublisherBuilder extends OperationPublisherBuilder {
         }
 
         @Override
-        public String getPlainText() {
+        public BodyPublisherProducer getPlainText() {
             return plainText;
         }
 
         @Override
-        public String getUrlEncodedData() {
+        public BodyPublisherProducer getUrlEncodedData() {
             return urlEncodedData;
         }
 

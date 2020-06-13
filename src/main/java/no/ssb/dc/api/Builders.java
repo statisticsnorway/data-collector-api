@@ -9,6 +9,10 @@ import no.ssb.dc.api.node.builder.ExecuteBuilder;
 import no.ssb.dc.api.node.builder.GetBuilder;
 import no.ssb.dc.api.node.builder.HttpStatusValidationBuilder;
 import no.ssb.dc.api.node.builder.JqPathBuilder;
+import no.ssb.dc.api.node.builder.JwtBuilder;
+import no.ssb.dc.api.node.builder.JwtClaims;
+import no.ssb.dc.api.node.builder.JwtHeaderClaims;
+import no.ssb.dc.api.node.builder.JwtTokenBodyPublisherProducerBuilder;
 import no.ssb.dc.api.node.builder.NextPageBuilder;
 import no.ssb.dc.api.node.builder.PaginateBuilder;
 import no.ssb.dc.api.node.builder.ParallelBuilder;
@@ -33,6 +37,22 @@ public class Builders {
 
     public static SecurityBuilder security() {
         return new SecurityBuilder();
+    }
+
+    public static JwtBuilder jwt(String id, JwtHeaderClaims headerClaims, JwtClaims claims) {
+        return new JwtBuilder(id, headerClaims, claims);
+    }
+
+    public static JwtTokenBodyPublisherProducerBuilder jwtToken() {
+        return new JwtTokenBodyPublisherProducerBuilder();
+    }
+
+    public static JwtHeaderClaims headerClaims() {
+        return new JwtHeaderClaims();
+    }
+
+    public static JwtClaims claims() {
+        return new JwtClaims();
     }
 
     public static GetBuilder get(String functionId) {

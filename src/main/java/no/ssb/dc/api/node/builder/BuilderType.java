@@ -4,6 +4,8 @@ public enum BuilderType {
     Specification,
     SpecificationContext,
     Security,
+    JwtIdentity,
+    JwtToken,
     Paginate,
     Sequence,
     NextPage,
@@ -24,6 +26,7 @@ public enum BuilderType {
     Delete,
     HttpStatusValidation,
     BodyPublisher,
+    BodyPublisherProducer,
     HttpResponseBodyContains;
 
     public static BuilderType parse(String name) {

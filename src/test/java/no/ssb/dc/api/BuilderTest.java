@@ -60,7 +60,7 @@ public class BuilderTest {
                     .url("http://com.company/authorize")
                     .data(bodyPublisher()
                             .plainText("PLAIN_TEXT")
-                            .urlEncodedData("username=user&password=pass")
+                            .urlEncoded("username=user&password=pass")
                             .textPart("foo", "bar")
                             .formPart("foo", "file", "bar")
 
@@ -70,7 +70,7 @@ public class BuilderTest {
                     .url("http://com.company/authorize")
                     .data(bodyPublisher()
                             .plainText("PLAIN_TEXT")
-                            .urlEncodedData("foo=bar")
+                            .urlEncoded("foo=bar")
                             .textPart("foo", "bar")
                             .formPart("foo", "file", "bar")
 

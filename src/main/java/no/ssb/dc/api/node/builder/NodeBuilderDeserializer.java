@@ -407,7 +407,7 @@ public class NodeBuilderDeserializer extends StdDeserializer<AbstractBuilder> {
 
                 JsonNode urlEncodedDataNode = currentNode.get("urlEncodedData");
                 if (urlEncodedDataNode != null) {
-                    builder.urlEncodedData(urlEncodedDataNode.textValue());
+                    builder.urlEncoded(urlEncodedDataNode.textValue());
                 }
 
                 // TODO add MultiPartFormData
