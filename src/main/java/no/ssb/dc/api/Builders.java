@@ -1,6 +1,7 @@
 package no.ssb.dc.api;
 
 import no.ssb.dc.api.node.builder.AddContentBuilder;
+import no.ssb.dc.api.node.builder.BodyBuilder;
 import no.ssb.dc.api.node.builder.BodyContainsBuilder;
 import no.ssb.dc.api.node.builder.BodyPublisherBuilder;
 import no.ssb.dc.api.node.builder.DeleteBuilder;
@@ -119,6 +120,10 @@ public class Builders {
 
     public static PublishBuilder publish(String positionVariable) {
         return new PublishBuilder(positionVariable);
+    }
+
+    public static BodyBuilder body() {
+        return new BodyBuilder();
     }
 
     public static EvalBuilder eval(QueryBuilder queryBuilder, String bindTo, String elExpression) {

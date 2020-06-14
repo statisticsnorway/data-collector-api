@@ -12,6 +12,7 @@ public enum BuilderType {
     Parallel,
     Execute,
     Process,
+    QueryBody,
     QueryEval,
     QueryXPath,
     QueryJqPath,
