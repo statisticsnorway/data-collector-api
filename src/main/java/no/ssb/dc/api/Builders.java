@@ -4,15 +4,17 @@ import no.ssb.dc.api.node.builder.AddContentBuilder;
 import no.ssb.dc.api.node.builder.BodyBuilder;
 import no.ssb.dc.api.node.builder.BodyContainsBuilder;
 import no.ssb.dc.api.node.builder.BodyPublisherBuilder;
+import no.ssb.dc.api.node.builder.ConsoleBuilder;
 import no.ssb.dc.api.node.builder.DeleteBuilder;
 import no.ssb.dc.api.node.builder.EvalBuilder;
 import no.ssb.dc.api.node.builder.ExecuteBuilder;
+import no.ssb.dc.api.node.builder.ForEachBuilder;
 import no.ssb.dc.api.node.builder.GetBuilder;
 import no.ssb.dc.api.node.builder.HttpStatusValidationBuilder;
 import no.ssb.dc.api.node.builder.JqPathBuilder;
-import no.ssb.dc.api.node.builder.JwtBuilder;
 import no.ssb.dc.api.node.builder.JwtClaims;
 import no.ssb.dc.api.node.builder.JwtHeaderClaims;
+import no.ssb.dc.api.node.builder.JwtIdentityBuilder;
 import no.ssb.dc.api.node.builder.JwtTokenBodyPublisherProducerBuilder;
 import no.ssb.dc.api.node.builder.NextPageBuilder;
 import no.ssb.dc.api.node.builder.PaginateBuilder;
@@ -40,8 +42,8 @@ public class Builders {
         return new SecurityBuilder();
     }
 
-    public static JwtBuilder jwt(String id, JwtHeaderClaims headerClaims, JwtClaims claims) {
-        return new JwtBuilder(id, headerClaims, claims);
+    public static JwtIdentityBuilder jwt(String id, JwtHeaderClaims headerClaims, JwtClaims claims) {
+        return new JwtIdentityBuilder(id, headerClaims, claims);
     }
 
     public static JwtTokenBodyPublisherProducerBuilder jwtToken() {
@@ -106,6 +108,10 @@ public class Builders {
         return new ParallelBuilder(builder);
     }
 
+    public static ForEachBuilder forEach(QueryBuilder builder) {
+        return new ForEachBuilder(builder);
+    }
+
     public static ExecuteBuilder execute(String function) {
         return new ExecuteBuilder(function);
     }
@@ -148,5 +154,9 @@ public class Builders {
 
     public static WhenExpressionIsTrueBuilder whenExpressionIsTrue(String expression) {
         return new WhenExpressionIsTrueBuilder().identifier(expression);
+    }
+
+    public static ConsoleBuilder console() {
+        return new ConsoleBuilder();
     }
 }

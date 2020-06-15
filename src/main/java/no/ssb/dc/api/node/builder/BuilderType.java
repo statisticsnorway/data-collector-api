@@ -7,6 +7,7 @@ public enum BuilderType {
     JwtIdentity,
     JwtToken,
     Paginate,
+    ForEach,
     Sequence,
     NextPage,
     Parallel,
@@ -28,7 +29,8 @@ public enum BuilderType {
     HttpStatusValidation,
     BodyPublisher,
     BodyPublisherProducer,
-    HttpResponseBodyContains;
+    HttpResponseBodyContains,
+    Console;
 
     public static BuilderType parse(String name) {
         for (BuilderType builderType : values()) {

@@ -6,12 +6,12 @@ import no.ssb.dc.api.node.Base;
 import no.ssb.dc.api.node.JwtIdentity;
 
 @JsonDeserialize(using = NodeBuilderDeserializer.class)
-public class JwtBuilder extends IdentityBuilder {
+public class JwtIdentityBuilder extends IdentityBuilder {
 
     @JsonProperty("headerClaims") JwtHeaderClaims headerClaims;
     @JsonProperty("claims") JwtClaims claims;
 
-    public JwtBuilder(String id, JwtHeaderClaims headerClaims, JwtClaims claims) {
+    public JwtIdentityBuilder(String id, JwtHeaderClaims headerClaims, JwtClaims claims) {
         super(BuilderType.JwtIdentity, id);
         this.headerClaims = headerClaims;
         this.claims = claims;

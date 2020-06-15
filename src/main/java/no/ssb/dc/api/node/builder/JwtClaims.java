@@ -11,7 +11,7 @@ public class JwtClaims {
 
     @JsonProperty String audience;
 
-    @JsonProperty int timeToLiveInSeconds;
+    @JsonProperty String timeToLiveInSeconds;
 
     @JsonProperty Map<String, String> claims = new LinkedHashMap<>();
 
@@ -25,7 +25,7 @@ public class JwtClaims {
         return this;
     }
 
-    public JwtClaims timeToLiveInSeconds(int timeToLiveInSeconds) {
+    public JwtClaims timeToLiveInSeconds(String timeToLiveInSeconds) {
         this.timeToLiveInSeconds = timeToLiveInSeconds;
         return this;
     }
@@ -43,7 +43,7 @@ public class JwtClaims {
         return audience;
     }
 
-    public int timeToLiveInSeconds() {
+    public String timeToLiveInSeconds() {
         return timeToLiveInSeconds;
     }
 
