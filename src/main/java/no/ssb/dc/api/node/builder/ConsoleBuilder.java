@@ -20,6 +20,11 @@ public class ConsoleBuilder extends NodeBuilder {
         return (R) new ConsoleNode(buildContext.getInstance(SpecificationBuilder.GLOBAL_CONFIGURATION));
     }
 
+    @Override
+    public String toString() {
+        return "ConsoleBuilder{}";
+    }
+
     static class ConsoleNode extends FlowNode implements Console {
 
         public ConsoleNode(Configurations configurations) {
@@ -34,6 +39,11 @@ public class ConsoleBuilder extends NodeBuilder {
         @Override
         public Iterator<? extends Node> iterator() {
             return createNodeList().iterator();
+        }
+
+        @Override
+        public String toString() {
+            return "ConsoleNode{}";
         }
     }
 }

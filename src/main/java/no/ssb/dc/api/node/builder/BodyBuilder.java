@@ -16,6 +16,11 @@ public class BodyBuilder extends QueryBuilder {
         return (R) new BodyNode();
     }
 
+    @Override
+    public String toString() {
+        return "BodyBuilder{}";
+    }
+
     class BodyNode extends QueryNode implements Body {
 
         public BodyNode() {
@@ -25,6 +30,11 @@ public class BodyBuilder extends QueryBuilder {
         @Override
         public String expression() {
             return Void.TYPE.getName();
+        }
+
+        @Override
+        public String toString() {
+            return "BodyNode{}";
         }
     }
 

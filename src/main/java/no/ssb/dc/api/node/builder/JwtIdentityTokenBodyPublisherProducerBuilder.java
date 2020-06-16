@@ -42,7 +42,10 @@ public class JwtIdentityTokenBodyPublisherProducerBuilder extends IdentityTokenB
     public <R extends Base> R build(BuildContext buildContext) {
         Configurations configurations = (Configurations) buildContext.nodeInstanceById().get(GLOBAL_CONFIGURATION);
         Optional<Identity> identity = Optional.ofNullable(configurations).stream().flatMap(conf -> conf.security().identities().stream().filter(i -> i.id().equals(identityId))).findFirst();
-        return (R) new JwtTokenBodyPublisherProducerNode(identity.orElseThrow(), bindTo, token);
+        if (identity.isEmpty()) {
+            throw new IllegalStateException("Incorrect identity reference!");
+        }
+        return (R) new JwtTokenBodyPublisherProducerNode(identity.get(), bindTo, token);
     }
 
     @Override

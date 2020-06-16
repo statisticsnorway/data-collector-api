@@ -230,6 +230,20 @@ public class NodeBuilderDeserializer extends StdDeserializer<AbstractBuilder> {
                 return builder;
             }
 
+            case ForEach: {
+                JsonNode splitQueryNode = currentNode.get("splitQuery");
+                QueryBuilder splitQueryBuilder = (QueryBuilder) handleNodeBuilder(depth + 1, context, ancestors, currentNode, splitQueryNode);
+                ForEachBuilder builder = new ForEachBuilder(splitQueryBuilder);
+                if (currentNode.has("pipes")) {
+                    JsonNode pipeNodes = currentNode.get("pipes");
+                    pipeNodes.forEach(pipeNode -> {
+                        NodeBuilder pipeBuilder = (NodeBuilder) handleNodeBuilder(depth + 1, context, ancestors, currentNode, pipeNode);
+                        builder.pipe(pipeBuilder);
+                    });
+                }
+                return builder;
+            }
+
             case Execute: {
                 ExecuteBuilder builder = new ExecuteBuilder(currentNode.get("executeId").textValue());
 
@@ -252,6 +266,14 @@ public class NodeBuilderDeserializer extends StdDeserializer<AbstractBuilder> {
                 } catch (ClassNotFoundException e) {
                     throw new RuntimeException(e);
                 }
+            }
+
+            case Console: {
+                return new ConsoleBuilder();
+            }
+
+            case QueryBody: {
+                return new BodyBuilder();
             }
 
             case QueryEval: {
