@@ -5,7 +5,7 @@ public enum BuilderType {
     SpecificationContext,
     Security,
     JwtIdentity,
-    JwtToken,
+    JwtIdentityTokenBodyPublisherProducer,
     Paginate,
     ForEach,
     Sequence,
@@ -28,7 +28,7 @@ public enum BuilderType {
     Delete,
     HttpStatusValidation,
     BodyPublisher,
-    BodyPublisherProducer,
+    StringBodyPublisherProducer,
     HttpResponseBodyContains,
     Console;
 

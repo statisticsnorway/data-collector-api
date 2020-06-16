@@ -435,12 +435,16 @@ public class NodeBuilderDeserializer extends StdDeserializer<AbstractBuilder> {
 
                 JsonNode plainTextDataNode = currentNode.get("plainTextData");
                 if (plainTextDataNode != null) {
-                    builder.plainText(plainTextDataNode.textValue());
+                    BodyPublisherProducerBuilder bodyPublisherProducerBuilder =
+                            (BodyPublisherProducerBuilder) handleNodeBuilder(depth + 1, context, ancestors, currentNode, plainTextDataNode);
+                    builder.plainText(bodyPublisherProducerBuilder);
                 }
 
                 JsonNode urlEncodedDataNode = currentNode.get("urlEncodedData");
                 if (urlEncodedDataNode != null) {
-                    builder.urlEncoded(urlEncodedDataNode.textValue());
+                    BodyPublisherProducerBuilder bodyPublisherProducerBuilder =
+                            (BodyPublisherProducerBuilder) handleNodeBuilder(depth + 1, context, ancestors, currentNode, urlEncodedDataNode);
+                    builder.urlEncoded(bodyPublisherProducerBuilder);
                 }
 
                 // TODO add MultiPartFormData
@@ -472,6 +476,23 @@ public class NodeBuilderDeserializer extends StdDeserializer<AbstractBuilder> {
                 return builder;
             }
 
+
+            case StringBodyPublisherProducer: {
+                String data = currentNode.get("data").textValue();
+                StringBodyPublisherProducerBuilder builder = new StringBodyPublisherProducerBuilder(data);
+                return builder;
+            }
+
+            case JwtIdentityTokenBodyPublisherProducer: {
+                String identityId = currentNode.get("identityId").textValue();
+                String bindTo = currentNode.get("bindTo").textValue();
+                String token = currentNode.get("token").textValue();
+                JwtIdentityTokenBodyPublisherProducerBuilder builder = new JwtIdentityTokenBodyPublisherProducerBuilder();
+                builder.identityId(identityId);
+                builder.bindTo(bindTo);
+                builder.token(token);
+                return builder;
+            }
 
             case HttpStatusValidation: {
                 HttpStatusValidationBuilder builder = new HttpStatusValidationBuilder();

@@ -15,7 +15,7 @@ import no.ssb.dc.api.node.builder.JqPathBuilder;
 import no.ssb.dc.api.node.builder.JwtClaims;
 import no.ssb.dc.api.node.builder.JwtHeaderClaims;
 import no.ssb.dc.api.node.builder.JwtIdentityBuilder;
-import no.ssb.dc.api.node.builder.JwtTokenBodyPublisherProducerBuilder;
+import no.ssb.dc.api.node.builder.JwtIdentityTokenBodyPublisherProducerBuilder;
 import no.ssb.dc.api.node.builder.NextPageBuilder;
 import no.ssb.dc.api.node.builder.PaginateBuilder;
 import no.ssb.dc.api.node.builder.ParallelBuilder;
@@ -46,8 +46,8 @@ public class Builders {
         return new JwtIdentityBuilder(id, headerClaims, claims);
     }
 
-    public static JwtTokenBodyPublisherProducerBuilder jwtToken() {
-        return new JwtTokenBodyPublisherProducerBuilder();
+    public static JwtIdentityTokenBodyPublisherProducerBuilder jwtToken() {
+        return new JwtIdentityTokenBodyPublisherProducerBuilder();
     }
 
     public static JwtHeaderClaims headerClaims() {

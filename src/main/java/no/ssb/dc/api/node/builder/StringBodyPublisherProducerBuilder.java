@@ -11,7 +11,7 @@ public class StringBodyPublisherProducerBuilder extends BodyPublisherProducerBui
     @JsonProperty String data;
 
     public StringBodyPublisherProducerBuilder(String data) {
-        super(BuilderType.BodyPublisherProducer);
+        super(BuilderType.StringBodyPublisherProducer);
         this.data = data;
     }
 

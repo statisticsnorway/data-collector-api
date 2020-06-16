@@ -67,7 +67,6 @@ public class BuilderTest {
                             .urlEncoded("username=user&password=pass")
                             .textPart("foo", "bar")
                             .formPart("foo", "file", "bar")
-
                     )
             )
             .function(put("create-something")
@@ -78,6 +77,12 @@ public class BuilderTest {
                             .textPart("foo", "bar")
                             .formPart("foo", "file", "bar")
 
+                    )
+            )
+            .function(post("jwt-token")
+                    .url("http://com.company/auth")
+                    .data(bodyPublisher()
+                            .urlEncoded("foo=bar")
                     )
             )
             .function(get("page")

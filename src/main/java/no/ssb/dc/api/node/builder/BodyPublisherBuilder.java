@@ -32,14 +32,20 @@ public class BodyPublisherBuilder extends OperationPublisherBuilder {
         return this;
     }
 
+    public BodyPublisherBuilder plainText(BodyPublisherProducerBuilder bodyPublisherProducerBuilder) {
+        this.plainText = bodyPublisherProducerBuilder;
+        this.encoding = FormEncoding.TEXT_PLAIN;
+        return this;
+    }
+
     public BodyPublisherBuilder urlEncoded(String data) {
         this.urlEncodedData = new StringBodyPublisherProducerBuilder(data);
         this.encoding = FormEncoding.APPLICATION_X_WWW_FORM_URLENCODED;
         return this;
     }
 
-    public BodyPublisherBuilder urlEncoded(IdentityTokenBuilder identityTokenBuilder) {
-        this.urlEncodedData = identityTokenBuilder;
+    public BodyPublisherBuilder urlEncoded(BodyPublisherProducerBuilder bodyPublisherProducerBuilder) {
+        this.urlEncodedData = bodyPublisherProducerBuilder;
         this.encoding = FormEncoding.APPLICATION_X_WWW_FORM_URLENCODED;
         return this;
     }
