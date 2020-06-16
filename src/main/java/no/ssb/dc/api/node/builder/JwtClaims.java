@@ -4,29 +4,24 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class JwtClaims {
 
-    @JsonProperty String issuer;
-
-    @JsonProperty String audience;
-
-    @JsonProperty String timeToLiveInSeconds;
-
-    @JsonProperty Map<String, String> claims = new LinkedHashMap<>();
+    @JsonProperty("claims") Map<String, String> claims = new LinkedHashMap<>();
 
     public JwtClaims issuer(String issuer) {
-        this.issuer = issuer;
+        claims.put("issuer", issuer);
         return this;
     }
 
     public JwtClaims audience(String audience) {
-        this.audience = audience;
+        claims.put("audience", audience);
         return this;
     }
 
     public JwtClaims timeToLiveInSeconds(String timeToLiveInSeconds) {
-        this.timeToLiveInSeconds = timeToLiveInSeconds;
+        claims.put("timeToLiveInSeconds", timeToLiveInSeconds);
         return this;
     }
 
@@ -36,18 +31,38 @@ public class JwtClaims {
     }
 
     public String issuer() {
-        return issuer;
+        return claims.get("issuer");
     }
 
     public String audience() {
-        return audience;
+        return claims.get("audience");
     }
 
     public String timeToLiveInSeconds() {
-        return timeToLiveInSeconds;
+        return claims.get("timeToLiveInSeconds");
     }
 
     public Map<String, String> getClaims() {
         return claims;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        JwtClaims claims1 = (JwtClaims) o;
+        return Objects.equals(claims, claims1.claims);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(claims);
+    }
+
+    @Override
+    public String toString() {
+        return "JwtClaims{" +
+                "claims=" + claims +
+                '}';
     }
 }

@@ -1,15 +1,17 @@
 package no.ssb.dc.api.node.builder;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import no.ssb.dc.api.node.Base;
 import no.ssb.dc.api.node.JwtIdentity;
 
+import java.util.Objects;
+
 @JsonDeserialize(using = NodeBuilderDeserializer.class)
 public class JwtIdentityBuilder extends IdentityBuilder {
 
-    @JsonProperty("headerClaims") JwtHeaderClaims headerClaims;
-    @JsonProperty("claims") JwtClaims claims;
+    @JsonUnwrapped JwtHeaderClaims headerClaims;
+    @JsonUnwrapped JwtClaims claims;
 
     public JwtIdentityBuilder(String id, JwtHeaderClaims headerClaims, JwtClaims claims) {
         super(BuilderType.JwtIdentity, id);
@@ -20,6 +22,29 @@ public class JwtIdentityBuilder extends IdentityBuilder {
     @Override
     public <R extends Base> R build(BuildContext buildContext) {
         return (R) new JwtIdentityNode(id, headerClaims, claims);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        JwtIdentityBuilder that = (JwtIdentityBuilder) o;
+        return Objects.equals(headerClaims, that.headerClaims) &&
+                Objects.equals(claims, that.claims);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), headerClaims, claims);
+    }
+
+    @Override
+    public String toString() {
+        return "JwtIdentityBuilder{" +
+                "headerClaims=" + headerClaims +
+                ", claims=" + claims +
+                '}';
     }
 
     static class JwtIdentityNode extends LeafNode implements JwtIdentity {
@@ -47,6 +72,30 @@ public class JwtIdentityBuilder extends IdentityBuilder {
         @Override
         public JwtClaims claims() {
             return claims;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            JwtIdentityNode that = (JwtIdentityNode) o;
+            return Objects.equals(id, that.id) &&
+                    Objects.equals(headerClaims, that.headerClaims) &&
+                    Objects.equals(claims, that.claims);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(id, headerClaims, claims);
+        }
+
+        @Override
+        public String toString() {
+            return "JwtIdentityNode{" +
+                    "id='" + id + '\'' +
+                    ", headerClaims=" + headerClaims +
+                    ", claims=" + claims +
+                    '}';
         }
     }
 }

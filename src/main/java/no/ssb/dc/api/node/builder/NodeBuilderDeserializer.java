@@ -128,6 +128,39 @@ public class NodeBuilderDeserializer extends StdDeserializer<AbstractBuilder> {
                     builder.sslBundleName(sslBundleNameNode.textValue());
                 }
 
+                ArrayNode identityNodes = (ArrayNode) currentNode.get("identities");
+                if (identityNodes != null) {
+                    identityNodes.forEach(identityNode -> {
+                        builder.identity((IdentityBuilder) handleNodeBuilder(depth + 1, context, ancestors, currentNode, identityNode));
+                    });
+                }
+
+                return builder;
+            }
+
+            case JwtIdentity: {
+                String id = currentNode.get("id").textValue();
+
+                JwtHeaderClaims headerClaims = new JwtHeaderClaims();
+                JsonNode headerClaimsNode = currentNode.get("headerClaims");
+                if (headerClaimsNode != null) {
+                    headerClaimsNode.fields().forEachRemaining(entry -> {
+                        String value = entry.getValue() == null ? null : entry.getValue().textValue(); // todo only support string values
+                        headerClaims.headerClaims.put(entry.getKey(), value);
+                    });
+                }
+
+                JwtClaims claims = new JwtClaims();
+                JsonNode claimsNode = currentNode.get("claims");
+                if (claimsNode != null) {
+                    claimsNode.fields().forEachRemaining(entry -> {
+                        String value = entry.getValue() == null ? null : entry.getValue().textValue(); // todo only support string values
+                        claims.claims.put(entry.getKey(), value);
+                    });
+                }
+
+                IdentityBuilder builder = new JwtIdentityBuilder(id, headerClaims, claims);
+
                 return builder;
             }
 

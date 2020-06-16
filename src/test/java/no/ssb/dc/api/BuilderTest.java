@@ -11,11 +11,14 @@ import org.junit.jupiter.api.Test;
 
 import static no.ssb.dc.api.Builders.bodyContains;
 import static no.ssb.dc.api.Builders.bodyPublisher;
+import static no.ssb.dc.api.Builders.claims;
 import static no.ssb.dc.api.Builders.context;
 import static no.ssb.dc.api.Builders.delete;
 import static no.ssb.dc.api.Builders.execute;
 import static no.ssb.dc.api.Builders.get;
+import static no.ssb.dc.api.Builders.headerClaims;
 import static no.ssb.dc.api.Builders.jqpath;
+import static no.ssb.dc.api.Builders.jwt;
 import static no.ssb.dc.api.Builders.nextPage;
 import static no.ssb.dc.api.Builders.paginate;
 import static no.ssb.dc.api.Builders.parallel;
@@ -42,6 +45,7 @@ public class BuilderTest {
             )
             .configure(security()
                     .sslBundleName("ske-test-certs")
+                    .identity(jwt("test", headerClaims().alg("alg").x509CertChain("ske-test-certs"), claims().claim("foo", "bar")))
             )
             .function(get("getstartposition")
                     .url("http://com.company/getstartposition")
