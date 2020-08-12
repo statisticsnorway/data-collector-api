@@ -159,7 +159,7 @@ public class BuilderTest {
         FlowContext actualFlowContext = actual.end().configurations.flowContext();
         String serialized = actual.serialize();
         assertNotNull(serialized);
-        //System.out.printf("serialized:%n%s%n", serialized);
+        System.out.printf("serialized:%n%s%n", serialized);
 
         SpecificationBuilder deserialized = Specification.deserialize(serialized, SpecificationBuilder.class);
         assertNotNull(deserialized);

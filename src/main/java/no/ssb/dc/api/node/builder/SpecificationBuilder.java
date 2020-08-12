@@ -57,6 +57,7 @@ public class SpecificationBuilder extends AbstractBuilder {
     public Specification end() {
         BuildContext buildContext = BuildContext.fromNodeBuilderById(nodeBuilderById);
 
+        // add configuration leaf nodes
         Configurations.Builder configurationsBuilder = new Configurations.Builder();
         for (ConfigurationBuilder configurationBuilder : configurationBuilders) {
             configurationsBuilder.add(configurationBuilder.build(buildContext));
