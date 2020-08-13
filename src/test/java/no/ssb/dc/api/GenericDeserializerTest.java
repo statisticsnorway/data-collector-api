@@ -26,7 +26,7 @@ public class GenericDeserializerTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(GenericDeserializerTest.class);
 
-//    @BeforeAll
+    //    @BeforeAll
     static void beforeAll() {
         try (ScanResult scanResult = new ClassGraph().enableAllInfo().whitelistPackages("no.ssb.dc").scan()) {
             ClassInfoList cl = scanResult.getClassesImplementing(NodeWithId.class.getName());
@@ -35,24 +35,37 @@ public class GenericDeserializerTest {
     }
 
     @Test
-    public void name() {
+    public void parseSpecAndCreateBuilders() {
         SpecificationBuilder actual = BuilderTest.SPECIFICATION_BUILDER;
         String serialized = actual.serialize();
         assertNotNull(serialized);
 
         ObjectNode rootNode = JsonParser.createJsonParser().fromJson(serialized, ObjectNode.class);
 
-        traverse(0, new LinkedHashSet<>(), Map.entry("root", rootNode), (ancestors, currentEntry) -> {
-            String indent = Arrays.stream(new String[ancestors.size()]).map(element -> " ").collect(Collectors.joining());
-            String currentName = currentEntry.getKey();
-            JsonNode currentNode = currentEntry.getValue();
-            String id = currentNode.has("id") ? currentNode.get("id").asText() : null;
-            String type = currentNode.has("type") ? currentNode.get("type").asText() : null;
-
-            LOG.trace("{}{}: {} ({}) {}", indent, currentName, currentNode.getNodeType(), type, id);
-        });
+        traverse(0, new LinkedHashSet<>(), Map.entry("root", rootNode), this::handleEntry);
 
         LOG.trace(serialized);
+    }
+
+    private void handleEntry(Set<Map.Entry<String, JsonNode>> ancestors, Map.Entry<String, JsonNode> currentEntry) {
+        String indent = Arrays.stream(new String[ancestors.size()]).map(element -> " ").collect(Collectors.joining());
+        String currentName = currentEntry.getKey();
+        JsonNode currentNode = currentEntry.getValue();
+        String id = currentNode.has("id") ? currentNode.get("id").asText() : null;
+        String type = currentNode.has("type") ? currentNode.get("type").asText() : null;
+        LOG.trace("{}{}: {} ({}) {}", indent, currentName, currentNode.getNodeType(), type, id);
+
+        if (currentEntry.getValue().isArray()) {
+            for (int i = 0; i < currentEntry.getValue().size(); i++) {
+                Map.Entry<String, JsonNode> childEntry = Map.entry(String.valueOf(i), currentEntry.getValue().get(i));
+                if (isLiteralType(childEntry.getValue())) {
+                    continue;
+                }
+                ancestors.add(childEntry);
+                traverse(ancestors.size() + 1, ancestors, childEntry, this::handleEntry);
+                ancestors.remove(childEntry);
+            }
+        }
     }
 
     /*
@@ -66,21 +79,7 @@ public class GenericDeserializerTest {
                   Map.Entry<String, JsonNode> currentEntry,
                   BiConsumer<Set<Map.Entry<String, JsonNode>>, Map.Entry<String, JsonNode>> visit) {
 
-//        List<String> nodesWithIdList = List.of("configure", "functions", "pipes");
-//        if (currentEntry.getValue().has("id") || nodesWithIdList.stream().anyMatch(nodeId -> nodeId.equals(currentEntry.getKey()))) {
-
-        if (currentEntry.getValue().isArray()) {
-            visit.accept(ancestors, currentEntry);
-
-            for (int i = 0; i < currentEntry.getValue().size(); i++) {
-                Map.Entry<String, JsonNode> childEntry = Map.entry(String.valueOf(i), currentEntry.getValue().get(i));
-                ancestors.add(childEntry);
-                visit.accept(ancestors, childEntry);
-                ancestors.remove(childEntry);
-            }
-        } else {
-            visit.accept(ancestors, currentEntry);
-        }
+        visit.accept(ancestors, currentEntry);
 
         ancestors.add(currentEntry);
 
@@ -99,5 +98,6 @@ public class GenericDeserializerTest {
 
     private boolean isLiteralType(JsonNode node) {
         return !(node.isObject() || node.isArray());
+//        return false;
     }
 }
