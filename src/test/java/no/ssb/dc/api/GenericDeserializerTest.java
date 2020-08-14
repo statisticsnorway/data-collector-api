@@ -53,7 +53,10 @@ public class GenericDeserializerTest {
         JsonNode currentNode = currentEntry.getValue();
         String id = currentNode.has("id") ? currentNode.get("id").asText() : null;
         String type = currentNode.has("type") ? currentNode.get("type").asText() : null;
-        LOG.trace("{}{}: {} ({}) {}", indent, currentName, currentNode.getNodeType(), type, id);
+
+//        if (type != null) {
+            LOG.trace("{}{}: {} ({}) {} @ {}", indent, currentName, currentNode.getNodeType(), type, id, ""); // JsonParser.createJsonParser().toJSON(currentEntry.getValue())
+//        }
 
         if (currentEntry.getValue().isArray()) {
             for (int i = 0; i < currentEntry.getValue().size(); i++) {
