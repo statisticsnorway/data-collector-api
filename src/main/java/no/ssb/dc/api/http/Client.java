@@ -26,6 +26,8 @@ public interface Client {
 
     CompletableFuture<Response> sendAsync(Request request);
 
+    <R> CompletableFuture<Response> sendAsync(Request request, BodyHandler<R> bodyHandler);
+
     Object getDelegate();
 
     enum Version {
