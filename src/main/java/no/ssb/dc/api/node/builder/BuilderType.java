@@ -16,6 +16,7 @@ public enum BuilderType {
     QueryBody(BodyBuilder.class),
     QueryEval(EvalBuilder.class),
     QueryXPath(XPathBuilder.class),
+    QueryJsonToken(JsonTokenBuilder.class),
     QueryJqPath(JqPathBuilder.class),
     QueryRegEx(RegExBuilder.class),
     ConditionWhenVariableIsNull(WhenVariableIsNullBuilder.class),
