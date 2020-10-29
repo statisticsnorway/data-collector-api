@@ -279,8 +279,8 @@ public class NodeBuilderDeserializer extends StdDeserializer<AbstractBuilder> {
             }
 
             case QueryEval: {
-                QueryBuilder queryBuilder = (QueryBuilder) handleNodeBuilder(depth + 1, context, ancestors, currentNode, currentNode.get("query"));
-                String bindToVariableNode = currentNode.get("bindToVariable").textValue();
+                QueryBuilder queryBuilder = currentNode.has("query") ? (QueryBuilder) handleNodeBuilder(depth + 1, context, ancestors, currentNode, currentNode.get("query")) : null;
+                String bindToVariableNode = currentNode.has("bindToVariable") ? currentNode.get("bindToVariable").textValue() : null;
                 String expression = currentNode.get("expression").textValue();
                 return new EvalBuilder(queryBuilder, bindToVariableNode, expression);
             }
