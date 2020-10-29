@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import no.ssb.dc.api.Processor;
 import no.ssb.dc.api.Specification;
+import no.ssb.dc.api.http.HttpStatus;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -17,6 +18,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -370,6 +372,14 @@ public class NodeBuilderDeserializer extends StdDeserializer<AbstractBuilder> {
                     });
                 }
 
+                JsonNode retryWhileNodeArray = currentNode.get("retryWhile");
+                if (retryWhileNodeArray != null) {
+                    retryWhileNodeArray.forEach(retryWhileNode -> {
+                        LeafNodeBuilder retryWhileBuilder = (LeafNodeBuilder) handleNodeBuilder(depth + 1, context, ancestors, currentNode, retryWhileNode);
+                        builder.retryWhile(retryWhileBuilder);
+                    });
+                }
+
                 JsonNode validateResponseNode = currentNode.get("responseValidators");
                 if (validateResponseNode != null) {
                     validateResponseNode.forEach(validatorNode -> {
@@ -542,6 +552,31 @@ public class NodeBuilderDeserializer extends StdDeserializer<AbstractBuilder> {
                 builder.identityId(identityId);
                 builder.bindTo(bindTo);
                 builder.token(token);
+                return builder;
+            }
+
+            case HttpStatusRetryWhile: {
+                HttpStatusRetryWhileBuilder builder = new HttpStatusRetryWhileBuilder();
+
+                JsonNode isNode = currentNode.get("is");
+                // {"type":"HttpStatusRetryWhile","is":{RetryWhileStatus"200":[],"404":[{"type":"HttpResponseBodyContains","queryBuilder":{"type":"QueryJqPath","expression":".kode"},"equalToStringLiteral":"SP-002"}]}}
+//                for (Iterator<Map.Entry<String, JsonNode>> it = isNode.fields(); it.hasNext(); ) {
+//                    Map.Entry<String, JsonNode> elementNode = it.next();
+//                    for (Iterator<Map.Entry<String, JsonNode>> it = elementNode.fields(); it.hasNext(); ) {
+//
+//                    }
+
+                    HttpStatus statusCode = HttpStatus.valueOf(isNode.get("status").asText());
+                    TimeUnit duration = TimeUnit.valueOf(isNode.get("duration").asText());
+                    int amount = Integer.parseInt(isNode.get("amount").asText());
+
+                    builder.is(statusCode, duration, amount);
+//                    elementNode.getValue().forEach(responsePredicateNode -> {
+//                        ResponsePredicateBuilder responsePredicateBuilder = (ResponsePredicateBuilder) handleNodeBuilder(depth + 1, context, ancestors, currentNode, responsePredicateNode);
+//                        builder.is(statusCode, responsePredicateBuilder);
+//                    });
+//                }
+
                 return builder;
             }
 
