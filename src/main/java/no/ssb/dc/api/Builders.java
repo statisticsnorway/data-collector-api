@@ -133,6 +133,10 @@ public class Builders {
         return new BodyBuilder();
     }
 
+    public static EvalBuilder eval(String elExpression) {
+        return new EvalBuilder(elExpression);
+    }
+
     public static EvalBuilder eval(QueryBuilder queryBuilder, String bindTo, String elExpression) {
         return new EvalBuilder(queryBuilder, bindTo, elExpression);
     }
