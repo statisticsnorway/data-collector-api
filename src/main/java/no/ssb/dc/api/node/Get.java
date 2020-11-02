@@ -4,6 +4,6 @@ import java.util.List;
 
 public interface Get extends Operation {
 
-    List<Validator> retryWhile();
+    List<HttpStatusRetryWhile> retryWhile();
 
 }

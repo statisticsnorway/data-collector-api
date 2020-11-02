@@ -50,6 +50,32 @@ public class HttpStatusRetryWhileBuilder extends LeafNodeBuilder {
         return (R) new HttpStatusRetryWhileNode(statusCode, duration, amount, bodyContains);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        HttpStatusRetryWhileBuilder that = (HttpStatusRetryWhileBuilder) o;
+        return statusCode.equals(that.statusCode) &&
+                duration == that.duration &&
+                Objects.equals(amount, that.amount) &&
+                Objects.equals(bodyContainsBuilder, that.bodyContainsBuilder);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), statusCode, duration, amount, bodyContainsBuilder);
+    }
+
+    @Override
+    public String toString() {
+        return "HttpStatusRetryWhileBuilder{" +
+                "statusCode=" + statusCode +
+                ", duration=" + duration +
+                ", amount=" + amount +
+                ", bodyContainsBuilder=" + bodyContainsBuilder +
+                '}';
+    }
 
     static class HttpStatusRetryWhileNode extends LeafNode implements HttpStatusRetryWhile {
 

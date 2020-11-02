@@ -7,6 +7,7 @@ import no.ssb.dc.api.http.Headers;
 import no.ssb.dc.api.node.Base;
 import no.ssb.dc.api.node.Configurations;
 import no.ssb.dc.api.node.Get;
+import no.ssb.dc.api.node.HttpStatusRetryWhile;
 import no.ssb.dc.api.node.Node;
 import no.ssb.dc.api.node.Validator;
 
@@ -75,7 +76,7 @@ public class GetBuilder extends OperationBuilder {
     @SuppressWarnings("unchecked")
     @Override
     <R extends Base> R build(BuildContext buildContext) {
-        List<Validator> retryWhileList = new ArrayList<>();
+        List<HttpStatusRetryWhile> retryWhileList = new ArrayList<>();
         List<Validator> validators = new ArrayList<>();
 
         // add default http status validator if unassigned
@@ -85,7 +86,7 @@ public class GetBuilder extends OperationBuilder {
 
         for (LeafNodeBuilder retryWhileBuilder : this.retryWhileList) {
             Validator retryWhile = retryWhileBuilder.build(buildContext);
-            retryWhileList.add(retryWhile);
+            retryWhileList.add((HttpStatusRetryWhile) retryWhile);
         }
 
         for (LeafNodeBuilder validatorBuilder : this.validators) {
@@ -137,12 +138,12 @@ public class GetBuilder extends OperationBuilder {
 
         final String url;
         final Headers headers;
-        final List<Validator> retryWhileList;
+        final List<HttpStatusRetryWhile> retryWhileList;
         final List<Validator> validateResponse;
         final List<Node> pipes;
         final List<String> returnVariables;
 
-        GetNode(String id, Configurations configurations, String url, Headers headers, List<Validator> retryWhileList, List<Validator> validateResponse, List<Node> pipes, List<String> returnVariables) {
+        GetNode(String id, Configurations configurations, String url, Headers headers, List<HttpStatusRetryWhile> retryWhileList, List<Validator> validateResponse, List<Node> pipes, List<String> returnVariables) {
             super(configurations, id);
             this.url = url;
             this.headers = headers;
@@ -163,7 +164,7 @@ public class GetBuilder extends OperationBuilder {
         }
 
         @Override
-        public List<Validator> retryWhile() {
+        public List<HttpStatusRetryWhile> retryWhile() {
             return retryWhileList;
         }
 
