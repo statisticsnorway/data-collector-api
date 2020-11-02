@@ -1,12 +1,15 @@
 package no.ssb.dc.api.node;
 
-import no.ssb.dc.api.node.builder.RetryWhileStatus;
-
-import java.util.List;
-import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public interface HttpStatusRetryWhile extends Validator {
 
-    Map<RetryWhileStatus, List<ResponsePredicate>> is();
+    Integer statusCode();
+
+    TimeUnit duration();
+
+    Integer amount();
+
+    BodyContains bodyContains();
 
 }

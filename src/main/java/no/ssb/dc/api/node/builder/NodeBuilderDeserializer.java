@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import no.ssb.dc.api.Processor;
 import no.ssb.dc.api.Specification;
-import no.ssb.dc.api.http.HttpStatus;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -558,25 +557,11 @@ public class NodeBuilderDeserializer extends StdDeserializer<AbstractBuilder> {
             case HttpStatusRetryWhile: {
                 HttpStatusRetryWhileBuilder builder = new HttpStatusRetryWhileBuilder();
 
-                JsonNode isNode = currentNode.get("is");
-                // {"type":"HttpStatusRetryWhile","is":{RetryWhileStatus"200":[],"404":[{"type":"HttpResponseBodyContains","queryBuilder":{"type":"QueryJqPath","expression":".kode"},"equalToStringLiteral":"SP-002"}]}}
-//                for (Iterator<Map.Entry<String, JsonNode>> it = isNode.fields(); it.hasNext(); ) {
-//                    Map.Entry<String, JsonNode> elementNode = it.next();
-//                    for (Iterator<Map.Entry<String, JsonNode>> it = elementNode.fields(); it.hasNext(); ) {
-//
-//                    }
+                Integer statusCode = Integer.parseInt(currentNode.get("statusCode").asText());
+                TimeUnit duration = TimeUnit.valueOf(currentNode.get("duration").asText());
+                int amount = Integer.parseInt(currentNode.get("amount").asText());
 
-                    HttpStatus statusCode = HttpStatus.valueOf(isNode.get("status").asText());
-                    TimeUnit duration = TimeUnit.valueOf(isNode.get("duration").asText());
-                    int amount = Integer.parseInt(isNode.get("amount").asText());
-
-                    builder.is(statusCode, duration, amount);
-//                    elementNode.getValue().forEach(responsePredicateNode -> {
-//                        ResponsePredicateBuilder responsePredicateBuilder = (ResponsePredicateBuilder) handleNodeBuilder(depth + 1, context, ancestors, currentNode, responsePredicateNode);
-//                        builder.is(statusCode, responsePredicateBuilder);
-//                    });
-//                }
-
+                builder.is(statusCode, duration, amount);
                 return builder;
             }
 
